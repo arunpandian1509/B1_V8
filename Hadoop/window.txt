@@ -1,0 +1,88 @@
+CREATE TABLE sales(
+emp_id number,
+emp_name varchar2(10),
+department varchar2(10),
+salary number);
+
+INSERT INTO sales VALUES (101, 'Alice', 'HR', 50000);
+INSERT INTO sales VALUES (102, 'Bob', 'Sales', 60000);
+INSERT INTO sales VALUES (103, 'Charlie', 'IT', 72000);
+INSERT INTO sales VALUES (104, 'David', 'Finance', 55000);
+INSERT INTO sales VALUES (105, 'Eva', 'Sales', 62000);
+INSERT INTO sales VALUES (106, 'Frank', 'IT', 72000);
+INSERT INTO sales VALUES (107, 'Grace', 'HR', 51000);
+INSERT INTO sales VALUES (108, 'Helen', 'Finance', 58000);
+INSERT INTO sales VALUES (109, 'Miller', 'IT', 73000);
+INSERT INTO sales VALUES (110, 'Luffy', 'IT', 70000);
+
+
+select * from sales;
+
+--rank() function ascending
+select emp_id,emp_name,department,salary,
+rank() over(PARTITION BY department ORDER BY salary ) as rank from sales;
+
+--rank() function descending
+select emp_id,emp_name,department,salary,
+rank() over(PARTITION BY department ORDER BY salary desc) as rank from sales;
+
+--dense_rank() function ascending
+select emp_id,emp_name,department,salary,
+dense_rank() over(PARTITION BY department ORDER BY salary ) as dense_rank from sales;
+
+--dense_rank() function descending
+select emp_id,emp_name,department,salary,
+dense_rank() over(PARTITION BY department ORDER BY salary desc) as dense_rank from sales;
+
+
+WITH CTE AS(
+select emp_id,emp_name,department,salary,
+rank() over(PARTITION BY department ORDER BY salary desc) as sa from sales)
+SELECT * FROM CTE;
+
+--row_number ascending
+select emp_id,emp_name,department,salary,
+row_number() over(PARTITION BY department ORDER BY salary ) as row_number from sales;
+
+--row_number descending
+select emp_id,emp_name,department,salary,
+row_number() over(PARTITION BY department ORDER BY salary desc) as row_number from sales;
+
+--lag() ascending
+select emp_id,emp_name,department,salary,
+lag(salary) over(PARTITION BY department ORDER BY salary) as lag from sales;
+
+--lag() descending
+select emp_id,emp_name,department,salary,
+lag(salary) over(PARTITION BY department ORDER BY salary desc) as sa from sales;
+
+--lead() ascending
+select emp_id,emp_name,department,salary,
+lead(SALARY) over(PARTITION BY department ORDER BY salary ) as sa from sales;
+
+--lead() descending
+select emp_id,emp_name,department,salary,
+lead(SALARY) over(PARTITION BY department ORDER BY salary desc) as sa from sales;
+
+--first_value ascending
+select emp_id,emp_name,department,salary,
+first_value(SALARY) over(PARTITION BY department ORDER BY salary ) as sa from sales;  
+
+--first_value descending
+select emp_id,emp_name,department,salary,
+first_value(SALARY) over(PARTITION BY department ORDER BY salary desc ) as sa from sales;  
+
+
+--last_value ascending
+select emp_id,emp_name,department,salary,
+last_value(SALARY) over(PARTITION BY department ORDER BY salary  ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) as sa from sales;  
+
+--last_value descending
+select emp_id,emp_name,department,salary,
+last_value(SALARY) over(PARTITION BY department ORDER BY salary desc ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) as sa from sales;  
+
+
+
+
+
+ 

@@ -1,0 +1,73 @@
+SELECT * FROM student;
+
+SELECT * FROM student_audit;
+ 
+
+
+CREATE TABLE student(
+st_id NUMBER,
+First_name VARCHAR2(20),
+Last_name VARCHAR2(20),
+Fees NUMBER
+);
+
+
+INSERT INTO student VALUES(100,'Arjun','Menon',24000);
+INSERT INTO student VALUEs(101,'Priya','Sharma',10000);
+INSERT INTO student VALUES(102,'Rahul','Nair',14000);
+INSERT INTO student VALUES(103,'Sneha','Reddy',15000);
+INSERT INTO student VALUES(104,'Vikram','Singh',18000);
+INSERT INTO student VALUES(105,'Meera','Iyer',14000);
+INSERT INTO student VALUES(106,'Karthik','Rao',11000);
+INSERT INTO student VALUES(107,'Divya','Patel',10000);
+INSERT INTO student VALUES(108,'Siddharth','Das',20000);
+INSERT INTO student VALUES(109,'Anjali','Joshi',21200);
+
+
+create table student_audit(
+st_id number,
+Operation varchar2(10),
+Update_date TIMESTAMP);
+
+
+create trigger trg_st_audit_ins
+after insert on student
+for each row
+begin
+insert into student_audit values(:NEW.st_id,'INS',SYSTIMESTAMP);
+end;
+/
+
+insert into student values(110,'Arjun','Das',15000,1010);
+
+create trigger trg_st_audit_del
+after delete on student
+for each row
+begin
+insert into student_audit values(:OLD.st_id,'DEL',SYSTIMESTAMP);
+end;
+/
+
+delete from student where st_id=100;
+
+
+create procedure raise_fees(
+p_st_id number,
+p_fees number)
+IS
+begin
+update student set fees=fees+p_fees where st_id=p_st_id;
+end;
+/
+
+exec raise_fees(101,1000);
+
+
+--check column name
+desc student;
+
+
+SHOW ERRORS PROCEDURE raise_fees;
+
+SHOW ERRORS TRIGGER reg_st_audit_del ;
+

@@ -1,0 +1,27 @@
+
+kafka-storage.bat random-uuid
+
+gDqoc-JfSHaluR-taA3e8g
+
+
+.\bin\windows\kafka-storage.bat format -t gDqoc-JfSHaluR-taA3e8g -c .\config\kraft\server.properties
+
+
+.\bin\windows\kafka-server-start.bat .\config\kraft\server.properties
+
+
+.\bin\windows\kafka-topics.bat --create --topic test --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+
+
+.\bin\windows\kafka-console-producer.bat --topic test --bootstrap-server localhost:9092
+
+
+
+.\bin\windows\kafka-console-consumer.bat --topic test --from-beginning --bootstrap-server localhost:9092
+
+
+DISM /Online /Add-Capability /CapabilityName:WMIC~~~~
+
+
+
+
